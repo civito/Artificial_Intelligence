@@ -69,9 +69,7 @@ void BuildHeap() {
 
 
 void Enqueue(struct N N) {
-	//	printf("N[%d][%d]\n", N.ypos, N.xpos);
 	Queue[++size] = N;
-	//	printf("%d %d\n", Queue[size].ypos, Queue[size].xpos);
 }
 
 
@@ -99,7 +97,6 @@ void cal(int y, int x) {
 		for (j = 0; j < col; j++) {
 			if (N[i][j].val == 2) {
 				H[i][j] = MIN(H[i][j], abs(i - y) + abs(j - x));
-				//printf("H[%d][%d] = abs(%d - %d) + abs(%d - %d) = %d\n", i, j, i, y, j, x, H[i][j]);
 			}
 		}
 	}
@@ -112,7 +109,6 @@ void Make_heuristic() {
 	for (i = 0; i < row; i++) {
 		for (j = 0; j < col; j++) {
 			if (N[i][j].val == 4) {
-				//printf("N[%d][%d]\n", i, j);
 				cal(i, j);
 			}
 		}
@@ -164,13 +160,11 @@ void Erase_Pass() {
 void GBS(int x, int y) {
 	struct N tmp;
 	int cnt = 0;
-	//	printf("%d %d\n", x, y);
 	Enqueue(N[y][x]);
 
 	while (size != 0) {
 		tmp = Dequeue();
 		cnt += 1;
-		//		printf("N[tmp.ypos][tmp.xpos] == N[%d][%d]\n", tmp.ypos, tmp.xpos);
 
 		if (N[tmp.ypos + 1][tmp.xpos].val == 2) {
 			Enqueue(N[tmp.ypos + 1][tmp.xpos]);
@@ -221,14 +215,6 @@ void Print() {
 	}
 	printf("---\n");
 
-	for (i = 0; i < row; i++) {
-		for (j = 0; j < col; j++) {
-			printf("%d  ", H[i][j]);
-		}
-		printf("\n");
-	}
-	printf("---\n");
-
 	printf("length = %d\n", count);
 	printf("time = %d\n", time);
 }
@@ -238,8 +224,8 @@ int main() {
 	int i, j;
 	int startx, starty;
 
-	freopen("input3.txt", "r", stdin);
-	//freopen("output.txt", "w", stdout);
+	freopen("input.txt", "r", stdin);
+	freopen("output.txt", "w", stdout);
 
 
 
@@ -256,6 +242,7 @@ int main() {
 			N[i][j].ypos = i;
 		}
 	}
+
 
 	for (i = 0; i < row; i++) {
 		for (j = 0; j < col; j++) {
