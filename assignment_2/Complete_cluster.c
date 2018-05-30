@@ -182,7 +182,6 @@ void print() {
 		printf("%.8e\n", word[i].pos[Pos_num - 1]);
 
 		printf("%d\n", word[i].cluster);
-		//printf("%d\n", word[i].class_num);
 
 	}
 }
@@ -193,15 +192,8 @@ double logB(double x, double base) {
 
 void cal_En() {
 	int i;
-	/*
-	for (i = 1; i <= 8; i++) {
-		printf("%lf ", C[i]);
-	}
-	printf("\n");
-	printf("mem : %lf\n", mem_num);*/
 	for (i = 1; i <= Class_num; i++) {
 		if (C[i] > 0) {
-			//printf("%lf\n",(-1)*(C[i] / mem_num) * (logB((C[i] / mem_num), 2.0))*(mem_num / Word_num));
 			En_sum += ((-1)*(C[i] / mem_num) * (logB((C[i] / mem_num), 2.0)))*(mem_num / Word_num);
 		}
 	}
@@ -212,22 +204,18 @@ void Entropie() {
 
 	for (i = 1; i <= cluster_num; i++) {
 		mem_num = 0;
-		//printf("### cluster number : %d\n", i);
 		for (k = 1; k <= Class_num; k++) {
 			C[k] = 0;
 		}
 
 		for (j = 0; j < Word_num; j++) {
 			if (word[j].cluster == i) {
-				//printf("class num : %d\n", word[j].class_num);
 				mem_num += 1;
 				C[word[j].class_num] += 1;
 			}
 		}
 
 		cal_En();
-		//printf("Entropy : %lf\n", En_sum);
-		//printf("\n\n\n");
 	}
 }
 
@@ -301,10 +289,7 @@ int main(int argc, char* argv[]) {
 
 	cnt = 0;
 	for (i = 0; i < Word_num + 20; i++) {
-		//fgets(tmp, sizeof(tmp), stdin);
-		//tmp[strlen(tmp) - 1] = '\0';
 		scanf("%s",tmp);
-//		printf("%c\n", tmp[0]);
 
 		if (tmp[0] == '[') {
 			class_number += 1;
@@ -312,9 +297,7 @@ int main(int argc, char* argv[]) {
 			// not case sensitive 
 			for(j = 0; j < Word_num; j++){		
 				if (!strcasecmp(word[j].name, tmp)) { 
-					//printf("%s\n", word[j].name);
 					word[j].class_num = class_number;
-					//printf("%d\n", word[j].class_num);
 				}
 			}
 		}
@@ -322,49 +305,9 @@ int main(int argc, char* argv[]) {
 	
 	for(i = 0; i < Word_num; i++)
 	
-
-	/*
-	for (i = 0; i < 10; i++) {
-		printf("%lf ", relation[i].sim);
-	}
-	printf("\n");
-	*/
-
-
-	
-
 	qsort(relation, Rel, sizeof(struct Relation), compare_sim);
 
 
-	/*
-	for (i = 0; i < 10; i++) {
-		printf("%lf ", relation[i].sim);
-	}
-	printf("\n");
-	*/
-	
-	/*
-	for (i = 0; i < Word_num; i++) {
-		printf("%s\n", word[i].name);
-	}
-	printf("\n");
-	*/
-/*
-	for (i = 0; i < Rel; i++) {
-		printf("#%d -  sim = %lf,  idx1: %d  idx2: %d \n", i, relation[i].sim, relation[i].idx1, relation[i].idx2);
-	}
-	printf("\n");
-*/	
-	
-
-	/*
-	for (i = 0; i < 15; i++) {
-		scanf("%d %d %lf", &relation[i].idx1, &relation[i].idx2, &relation[i].sim);
-		printf("%d %d %lf\n", relation[i].idx1, relation[i].idx2, relation[i].sim);
-	}
-	*/
-
-	
 	while (relation[cnt].sim >= threshold && cnt < Rel) {
 
 		// initialize.
@@ -377,9 +320,6 @@ int main(int argc, char* argv[]) {
 		S[relation[cnt].idx2][relation[cnt].idx1] = 1;
 
 
-		//print();
-
-		
 		if (is_cluster[relation[cnt].idx1] != 0 && is_cluster[relation[cnt].idx2] != 0
 			&& is_cluster[relation[cnt].idx2] != is_cluster[relation[cnt].idx1]) {
 
@@ -426,17 +366,6 @@ int main(int argc, char* argv[]) {
 					}
 
 
-					/*
-					for (i = 0; i < Word_num; i++) {
-						for (j = i + 1; j < Word_num; j++) {
-							if (is_cluster[i] == is_cluster[relation[cnt].idx2] && is_cluster[j] == is_cluster[relation[cnt].idx2]){
-								S[i][j] = is_cluster[relation[cnt].idx1];
-								S[j][i] = is_cluster[relation[cnt].idx1];
-							}
-							
-						}
-					}*/
-
 				}
 				else {
 					tmp1 = is_cluster[relation[cnt].idx1];
@@ -458,16 +387,6 @@ int main(int argc, char* argv[]) {
 							is_cluster[i] = tmp2;
 						}
 					}
-					/*
-					for (i = 0; i < Word_num; i++) {
-						for (j = i + 1; j < Word_num; j++) {
-							if (is_cluster[i] == is_cluster[relation[cnt].idx1] && is_cluster[j] == is_cluster[relation[cnt].idx1]) {
-								S[i][j] = is_cluster[relation[cnt].idx2];
-								S[j][i] = is_cluster[relation[cnt].idx2];
-							}
-
-						}
-					}*/
 
 					for (i = 0; i < Word_num; i++) {
 						for (j = 0; j < Word_num; j++) {
@@ -549,57 +468,15 @@ int main(int argc, char* argv[]) {
 			}
 		}
 		
-		//printf("cnt : %d \n", cnt);
-
-
-		/*
-		for (int i = 0; i < Word_num; i++) {
-			for (int j = 0; j < Word_num; j++) {
-				printf("%d ", S[i][j]);
-			}
-			printf("\n");
-		}
-		printf("\n");
-		for (int j = 0; j < Word_num; j++) {
-			printf("%d ", is_cluster[j]);
-		}
-		printf("\n");
-		printf("\n");
-		printf("\n");*/
 		cnt++;
 	}
-	/*
-	for (int i = 0; i < Word_num; i++) {
-		for (int j = 0; j < Word_num; j++) {
-			printf("%d ", S[i][j]);
-		}
-		printf("\n");
-	}
-	printf("\n");*/
-	/*
-	for (int j = 0; j < Word_num; j++) {
-		printf("%d ", is_cluster[j]);
-	}
-	printf("\n");
-	*/
-	//printf("%d \n", cnt);
-
 
 
 	clustering();
-
-/*	
-	for (i = 0; i < Word_num; i++) {
-		printf("%d ", word[i].cluster);
-	}
-	printf("\n");
-*/	
-
 
 	Entropie();
 
 	printf("%lf\n", En_sum);
 
 	print();
-
 }
