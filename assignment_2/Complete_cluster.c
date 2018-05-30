@@ -14,7 +14,9 @@ case 4. Merge cluster
 #define Pos_num 300
 #define Class_num 8
 
-#define Normalization 35
+#define Normalization 300
+
+double Max,Min;
 
 
 #define Rel (Word_num * (Word_num - 1)) / 2
@@ -165,14 +167,14 @@ double Similarity_Euclidean(struct Word x, struct Word y) {
 		tmp1 += (x.pos[i] - y.pos[i]) * (x.pos[i] - y.pos[i]);
 	}
 
-	return sqrt(tmp1) / sqrt(Normalization);
+	return sqrt(tmp1);
 }
 
 
 void print() {
 	int i, j;
 
-	freopen("output.txt", "w", stdout);
+	freopen("WordClustering.txt", "w", stdout);
 	for (i = 0; i < Word_num; i++) {
 		printf("%s\n", word[i].name);
 		
@@ -244,6 +246,8 @@ int main(int argc, char* argv[]) {
 
 	threshold = atof(argv[2]);
 	
+	printf("%s Similarity\n", argv[1]);
+
 	printf("threshold : %lf\n",threshold);
 	
 
@@ -303,9 +307,25 @@ int main(int argc, char* argv[]) {
 		}
 	}
 	
-	for(i = 0; i < Word_num; i++)
-	
 	qsort(relation, Rel, sizeof(struct Relation), compare_sim);
+
+	Max = relation[0].sim;
+	Min = relation[Rel-1].sim;
+
+	k = 0;
+        for (i = 0; i < Word_num; i++) {
+                for (j = i + 1; j < Word_num; j++) {
+                        if(sflag == 1){
+                                relation[k].sim = (relation[k].sim - Min) / (Max - Min) ;
+				k++;
+                        }
+                        else if(sflag == 2){
+                        }else{
+                                printf("Error\n");
+                                exit(1);
+                        }
+                }
+        }
 
 
 	while (relation[cnt].sim >= threshold && cnt < Rel) {
@@ -319,7 +339,7 @@ int main(int argc, char* argv[]) {
 		S[relation[cnt].idx1][relation[cnt].idx2] = 1;
 		S[relation[cnt].idx2][relation[cnt].idx1] = 1;
 
-
+		
 		if (is_cluster[relation[cnt].idx1] != 0 && is_cluster[relation[cnt].idx2] != 0
 			&& is_cluster[relation[cnt].idx2] != is_cluster[relation[cnt].idx1]) {
 
@@ -364,7 +384,6 @@ int main(int argc, char* argv[]) {
 							}
 						}
 					}
-
 
 				}
 				else {
@@ -471,12 +490,12 @@ int main(int argc, char* argv[]) {
 		cnt++;
 	}
 
-
 	clustering();
 
 	Entropie();
-
-	printf("%lf\n", En_sum);
+	
+	printf("Entropie = %lf\n", En_sum);
 
 	print();
+
 }
